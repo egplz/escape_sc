@@ -12,7 +12,7 @@ public class ExitDoor : MonoBehaviour, IInteractable
 
     void Start()
     {
-        doorRenderer = GetComponent<Renderer>();
+        doorRenderer = GetComponentInChildren<Renderer>();
         UpdateVisual();
 
         // GameManager 이벤트 구독

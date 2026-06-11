@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -35,13 +36,27 @@ public class UIManager : MonoBehaviour
         }
 
         // 버튼 연결
-        winRestartButton?.onClick.AddListener(() => GameManager.Instance?.RestartGame());
-        winQuitButton?.onClick.AddListener(() => GameManager.Instance?.QuitGame());
-        gameOverRestartButton?.onClick.AddListener(() => GameManager.Instance?.RestartGame());
-        gameOverQuitButton?.onClick.AddListener(() => GameManager.Instance?.QuitGame());
+        winRestartButton?.onClick.AddListener(RestartGame);
+        winQuitButton?.onClick.AddListener(QuitGame);
+        gameOverRestartButton?.onClick.AddListener(RestartGame);
+        gameOverQuitButton?.onClick.AddListener(QuitGame);
 
         // 초기 UI
         UpdateBookCount(0, GameManager.Instance != null ? GameManager.Instance.totalBooks : 5);
+
+        StartCoroutine(HidePromptAfterDelay());
+    }
+
+    IEnumerator HidePromptAfterDelay()
+    {
+        if (interactPromptText != null)
+        {
+            interactPromptText.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(5f);
+
+            interactPromptText.gameObject.SetActive(false);
+        }
     }
 
     void OnDestroy()
@@ -77,5 +92,11 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         GameManager.Instance?.RestartGame();
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 1f;
+        GameManager.Instance?.QuitGame();
     }
 }
